@@ -42,15 +42,15 @@ That matters most for app-event triggers. A Slack account connected from Setting
 
 ## Visibility
 
-Every connection is **Workspace** or **Private**.
+Every connection is **Workspace** or **Private**. A connection that can be used only for **AI** starts **Private**. Every other connection starts **Workspace**.
 
-**Workspace** is how every connection starts, and it's almost always the right choice. The connection belongs to the workspace, so anyone with the **Developer** role can use and manage it, and it keeps working when whoever connected it leaves.
+A **Workspace** connection belongs to the workspace. Anyone in the workspace can use it, anyone with the **Developer** role can manage it, and it keeps working when whoever connected it leaves.
 
-**Private** restricts a connection to its creator. Only a connection whose one capability is **AI** can be private, so use it for a personal GitHub or Google account that you want the assistant to use on your behalf and nobody else's.
+**Private** restricts a connection to its creator. Only a connection whose one capability is **AI** can be private, so use it for a personal GitHub or Google account that you want the Assistant to use on your behalf and nobody else's.
 
 A private connection is invisible to everyone else: it's absent from their list, and they can't use it even if they know its id.
 
-To make a connection private, set **Visibility** under **Edit**. To share a private connection with the workspace, use **Share with workspace** on its row menu.
+To make a connection private, set **Visibility** under **Edit**. To share a private connection with the workspace, use **Share with workspace** on its row menu. Only a **Developer** who created the connection can share it.
 
 ## Related
 
