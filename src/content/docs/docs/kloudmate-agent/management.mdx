@@ -176,9 +176,55 @@ The agent is light. On a virtual machine or host, it runs as a single process an
 
 On Kubernetes, usage is split across the per-node collector and a few cluster-wide components. See [Resource usage and sizing](../platform-notes/kubernetes/#resource-usage-and-sizing) for per-component figures and suggested CPU and memory requests and limits.
 
-## Updating the agent
+## Upgrade the agent
 
-Update the agent by upgrading its package on the host or the Helm release on Kubernetes, the same way you installed it. The bundled instrumentation agents are versioned with the KloudMate agent, so they update together. See the [installation guides](../installation/linux-agent/).
+To upgrade the agent, run the install command again. The install script always fetches the latest release, so the same command you used to install the agent also upgrades it. The bundled instrumentation agents are versioned with the KloudMate agent, so they upgrade together.
+
+Copy the install command for your platform from **Settings → Agents → Add Agent**, using the same API key and collector endpoint as the existing agent.
+
+### Linux
+
+Run the Linux install command on the host. The script downloads the latest `.deb` or `.rpm` package, installs it over the old one, and restarts the `kmagent` service.
+
+Your existing `/etc/kmagent/agent.yaml` is kept as it is, including any settings you've added by hand.
+
+### Windows
+
+Download the latest installer from **Settings → Agents → Add Agent → Windows** and run it from an elevated (Administrator) prompt. Stop the service first so the installer can replace the running binary:
+
+```powershell
+Stop-Service kmagent
+.\kmagent-setup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /APIKEY=YOUR_API_KEY /ENDPOINT=https://otel.kloudmate.com:4318
+```
+
+You can also run the installer interactively and enter the API key and endpoint when prompted. The installer recreates the `kmagent` service and starts it.
+
+:::caution
+The installer rewrites `C:\ProgramData\kmagent\agent.yaml` with only the API key and collector endpoint. If you've edited that file by hand, back it up before upgrading and reapply your changes afterwards.
+:::
+
+### Docker
+
+Run the Docker install command on the host. The script pulls `ghcr.io/kloudmate/km-agent:latest`, removes the old `km-agent` container, and starts a new one. When it asks about additional log directories, give the same answers as the first time, or those directories won't be mounted into the new container.
+
+### Kubernetes
+
+Refresh the chart repository, then rerun the Helm command from the install wizard with `helm install` changed to `helm upgrade --install`. Pass the same `--set` flags you installed with:
+
+```bash
+helm repo update
+helm upgrade --install kloudmate-release kloudmate/km-kube-agent \
+  --namespace km-agent \
+  --set API_KEY="YOUR_API_KEY" \
+  --set COLLECTOR_ENDPOINT="https://otel.kloudmate.com:4318" \
+  --set clusterName="YOUR_CLUSTER_NAME"
+```
+
+Each chart version ships the matching agent image, so upgrading the chart rolls every agent pod to the new version.
+
+### Confirm the upgrade
+
+Open **Settings → Agents** and check the **Agent Version** of the upgraded agent. If it still shows the old version or the agent goes offline, see [Troubleshooting](../troubleshooting/).
 
 ## Best Practices
 
