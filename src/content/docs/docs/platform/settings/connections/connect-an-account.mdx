@@ -6,7 +6,7 @@ sidebar:
   order: 2
 ---
 
-You need the **Developer** role to connect an account. Open **Settings → Connections** and click **Connect**.
+You need the **Developer** role to connect an account. Open **Settings → Connections** and click **Connect**. To connect a tool server for the Assistant without that role, use [Assistant → MCP Integrations](/kloudmate-assistant/settings/#connect-a-tool-server).
 
 The picker lists only the providers your organization can connect. If a provider you expect is missing, see [Providers](../providers/#providers-in-your-plan).
 
@@ -26,7 +26,9 @@ The connection records the account you authorized, so you can tell two Slack ins
 
 AWS, Azure, GitHub, Atlassian, a custom MCP server, and a generic OAuth 2.0 API take their credentials in a form. Fill in the provider's fields and click **Connect**.
 
-Where a provider supports more than one method, choose one under **Authentication**. AWS offers **Assume Role** (recommended) or **Access keys**; a custom MCP server offers no auth, a bearer token, or an API key in a named header.
+Where a provider supports more than one method, choose one under **Authentication**. For example, Atlassian offers a **Personal API token** or a **Service account API key**, and a custom MCP server offers **None**, **Bearer token**, **Basic auth**, **API key**, or **OAuth**.
+
+A custom MCP server with **OAuth** is saved as **Pending** first, and then KloudMate opens the server's own sign-in page. KloudMate finds the server's sign-in, registers itself as a client, and uses PKCE, so you don't need a client ID. If the sign-in doesn't finish, the row stays **Pending** with an **Authorize** button beside it.
 
 KloudMate checks the credential as soon as you save. If the check fails, it still saves the connection, so you don't lose what you typed, and marks it **Degraded**. Click **Edit** beside it and fix the values.
 

@@ -6,7 +6,7 @@ sidebar:
   order: 1
 ---
 
-A connection is one credential for one account: an AWS role, a Slack bot install, an Atlassian grant, an MCP server token. Connect the account once, and every workflow step, notification channel, and dashboard query that needs it uses the same connection.
+A connection is one credential for one account: a pair of AWS access keys, a Slack bot install, an Atlassian grant, an MCP server token. Connect the account once, and every workflow step, notification channel, and dashboard query that needs it uses the same connection.
 
 When a credential changes, you rotate it once. Before you delete a connection, KloudMate lists everything that still uses it, and one switch takes it out of service everywhere.
 

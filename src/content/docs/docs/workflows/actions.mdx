@@ -109,7 +109,7 @@ The step returns AWS's response under `result`, so a later step reads a field as
 
 Changing the connection clears the region, changing the service clears the action and the parameters, and changing the action clears the parameters.
 
-The IAM policy on the credential decides what the step is allowed to do. There's no second permission list in KloudMate, so narrow the role itself. Put an [approval](../approvals-and-input/) in front of anything that changes a resource.
+The IAM policy on the credential decides what the step is allowed to do. There's no second permission list in KloudMate, so narrow the IAM policy itself. Put an [approval](../approvals-and-input/) in front of anything that changes a resource.
 
 ### Azure
 
