@@ -41,16 +41,28 @@ If nothing appears, open the incident and click **Start war room**. The dialog r
 
 Also worth checking: the room only opens on an escalation step's first pass, and a routing rule only opens one for incidents it creates. Neither opens a room for an incident that already existed.
 
+## A connection isn't in the meeting picker
+
+**A new meeting per incident** lists connections granted for **Meetings**. Microsoft 365, Google Meet, and Zoom carry that grant when you connect them, so a connection that's missing from the picker was either made before this existed or had the grant removed. Open it under **Settings → Connections**, click **Edit**, and add **Meetings** under **Can be used for**.
+
+Saving a connection that can't create meetings is refused with `connection '<provider>' is not connected for meetings`.
+
 ## The room opened without a Join Call button
 
 A call provider that fails doesn't hold up the room. KloudMate opens the channel, invites everyone, and leaves the call off the card.
 
 Open the incident, click the edit icon on **Conference call**, and paste a **Meeting link**. The card and the topic pick it up. Then look at why the provider failed:
 
-- The connection selected under **A new meeting per incident** was deleted, or is **Needs reconnect** or **Revoked**.
-- For Zoom, the host isn't a Licensed user. The verify error on the Zoom connection says so.
+- The connection selected under **A new meeting per incident** was deleted, switched off, or is **Needs reconnect** or **Revoked**. Removing the KloudMate app at Zoom's end leaves the connection in exactly that state.
+- The connection lost its **Meetings** grant, so the setting no longer points at anything usable.
 
 KloudMate doesn't retry the meeting for an open room, so adding the link by hand is the fix for the incident in front of you.
+
+## Zoom calls cut out after 40 minutes
+
+The KloudMate app was installed from a Basic Zoom account, and every war room meeting is created as the account that installed it. The Zoom connection shows **Degraded** with the account type in its error, something like `ops@example.com is a Zoom type 1 account`.
+
+Install the app again from a Licensed account. Meetings created after that carry no time limit.
 
 ## Someone wasn't invited
 

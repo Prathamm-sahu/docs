@@ -55,7 +55,7 @@ A Teams room is a group chat, created by the Microsoft 365 account you sign in w
 4. Set **Chat provider** to **Microsoft Teams** and pick that channel under **Chat channel**.
 </Steps>
 
-The default **Notifications** capability is enough for Teams war rooms, and the same connection can create the conference call. The consent screen covers creating a chat, posting to it, looking a member up by email address, and creating an online meeting.
+A Microsoft 365 connection is granted for **Notifications** and **Meetings** when you make it, which is what a Teams war room needs. The room and the call come from the same grant, so one consent screen covers creating the chat, posting to it, looking a member up by email address, and creating the online meeting.
 
 ## Add a conference call
 
@@ -67,7 +67,7 @@ The default **Notifications** capability is enough for Teams war rooms, and the 
 | **The same link every time** | KloudMate uses your **Call link**, rendered per incident, plus an optional **Dial-in**. Use a standing bridge, or a link with the incident key in it, such as `https://meet.google.com/lookup/inc-{{ key }}`. |
 | **A new meeting per incident** | KloudMate creates a fresh meeting on the connection you pick. |
 
-For a new meeting per incident, connect one of these under **Settings → Connections** and select it in the war room settings.
+For a new meeting per incident, connect one of these under **Settings → Connections** and select it in the war room settings. The picker lists connections granted for **Meetings**, so a Slack or AWS connection never shows up there.
 
 ### Microsoft Teams
 
@@ -79,7 +79,9 @@ Connect **Google Meet** and sign in as the Google Workspace account that should 
 
 ### Zoom
 
-Connect **Zoom** and install the KloudMate app on your Zoom account. Install it as a Licensed Zoom user: meetings hosted by a Basic user cut out after 40 minutes, which is not what you want halfway through an incident. Zoom rooms don't show a dial-in number.
+Connect **Zoom** and install the KloudMate app. Every war room meeting is created as the account that installs it, so install it from a Licensed Zoom account: meetings hosted by a Basic account cut out after 40 minutes, which is not what you want halfway through an incident. Zoom rooms don't show a dial-in number.
+
+Removing the KloudMate app from Zoom revokes the connection. KloudMate erases the stored credential, marks the connection **Revoked**, and switches it off, so rooms open without a call link until the app is installed again. **Reconnect** beside the connection re-runs the install and brings it back, with the same connection id, so the war room settings keep pointing at it.
 
 :::caution
 Account-level Zoom settings override what KloudMate asks for. If responders land in a waiting room or get turned away, check the account's join-before-host and authentication settings.
