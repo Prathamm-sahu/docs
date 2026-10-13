@@ -146,7 +146,7 @@ This example defines two tolerations to match the taints on the cluster nodes, s
 
 You can set the CPU and memory requests and limits of each agent container, and a priority class for the agent pods, with Helm values. The defaults are the values the chart has always used, so an existing install behaves the same until you change them.
 
-On clusters with small nodes, for example 2 vCPU, some agent pods can stay **Pending** with `Insufficient cpu`. Without a priority class they can't preempt other pods, so those nodes go unmonitored. The node agent typically uses only a few millicores of CPU and about 100Mi of memory, so lowering its requests is safe. A priority class lets the agent pods schedule ahead of lower-priority workloads.
+On clusters with small nodes, for example 2 vCPU, some agent pods can stay **Pending** with `Insufficient cpu`. Without a priority class they can't preempt other pods, so those nodes go unmonitored. The node agent typically uses only a few millicores of CPU and about 100Mi of memory, so lowering its requests is safe. A priority class lets the agent pods schedule ahead of lower-priority workloads. The cluster agent and fleet manager run as single-replica Deployments and can be tuned the same way.
 
 | Value | What it sets | Default |
 |---|---|---|
@@ -160,17 +160,20 @@ On clusters with small nodes, for example 2 vCPU, some agent pods can stay **Pen
 
 A `priorityClassName` is added to a pod only when you set it. These values need the latest km-kube-agent chart, so run `helm repo update` before you upgrade.
 
-Example Helm command that lowers the node agent's requests and gives its pods a priority class:
+Example Helm command that lowers the requests of the node agent and the cluster agent, and gives their pods a priority class:
 
 ```bash
 helm upgrade kloudmate-release kloudmate/km-kube-agent --namespace km-agent --reuse-values \
 --set daemonset.resources.requests.cpu=10m \
 --set daemonset.resources.requests.memory=128Mi \
---set daemonset.priorityClassName=system-node-critical
+--set daemonset.priorityClassName=system-node-critical \
+--set clusterAgent.resources.requests.cpu=100m \
+--set clusterAgent.resources.requests.memory=256Mi \
+--set clusterAgent.priorityClassName=system-cluster-critical
 ```
 
 :::note
-`system-node-critical` is a built-in Kubernetes priority class, and it lets the agent preempt other pods. For a gentler option, create your own PriorityClass and use its name.
+`system-node-critical` and `system-cluster-critical` are built-in Kubernetes priority classes, and they let the agent preempt other pods. `system-node-critical` suits the per-node DaemonSet, and `system-cluster-critical` suits the cluster-wide Deployment. For a gentler option, create your own PriorityClass and use its name.
 :::
 
 ## APM Setup Instructions
