@@ -34,6 +34,18 @@ One Slack install serves alert notifications, incident ChatOps, the [Slack workf
 
 One Jira credential can access several Atlassian sites, which is why every Jira action and trigger starts with a site picker.
 
+## Meetings
+
+These create the conference call for an incident [war room](/incident-management/war-rooms/). The war room settings list only connections that can be used for **Meetings**.
+
+| Provider | Credential | Can be used for |
+|---|---|---|
+| **Microsoft 365 / Teams** | Microsoft sign-in, as the service account that should own the rooms and meetings. | Notifications, Meetings |
+| **Google Workspace** | Google sign-in, as the Workspace account that should own the meeting spaces. | Meetings |
+| **Zoom** | An install of the KloudMate app, from a Licensed Zoom account. | Meetings |
+
+One Microsoft 365 connection covers both the Teams war room chat and its meeting. Meetings hosted by a Basic Zoom account end after 40 minutes, so install the Zoom app from a Licensed account. See [Set up war rooms](/incident-management/war-rooms/setup/#add-a-conference-call) for what each provider adds to a room.
+
 ## Tools and custom endpoints
 
 | Provider | Credential | Can be used for |
