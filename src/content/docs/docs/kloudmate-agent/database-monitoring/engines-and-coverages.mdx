@@ -13,7 +13,8 @@ A **coverage** is one area of data the agent collects from a database, such as s
 
 - **Standard metrics** is always on. Check **Collect all optional metrics** to collect the receiver's full metric set.
 - **Every other coverage is off** until you turn it on.
-- **Setup steps** appear in the wizard when you turn on a coverage that needs them, such as a grant or an extension. The agent doesn't check them, so run them before you save.
+- **Setup steps** appear in the wizard when you turn on a coverage that needs them, such as a grant or an extension. The wizard doesn't test them when you save, so run them first. A missing grant shows up as an empty tab in the Databases module and as errors in the agent log.
+- **Passwords** go in the wizard's **Password** field, or in the environment variable it names. See [Database credentials](../credentials/).
 - **Log file coverages** read files on the database host. They're available on a virtual machine and hidden on Kubernetes.
 - **The coverage list comes from the agent**, so an older agent offers fewer coverages.
 
@@ -56,8 +57,6 @@ Only one of the two log coverages can be on. **Schema catalog**, **Table bloat**
 
 ### Set up the database
 
-The wizard shows these steps when you turn on the coverages that need them. Run them before you save.
-
 #### Create a monitoring user
 
 Every PostgreSQL coverage connects as a monitoring user with the built-in `pg_monitor` role:
@@ -66,8 +65,6 @@ Every PostgreSQL coverage connects as a monitoring user with the built-in `pg_mo
 CREATE USER kmmonitor WITH PASSWORD 'YOUR_PASSWORD';
 GRANT pg_monitor TO kmmonitor;
 ```
-
-Use the same password in the wizard's **Password** field, or in the environment variable it names. See [Database credentials](../credentials/).
 
 #### Enable pg_stat_statements
 
@@ -81,26 +78,6 @@ Use the same password in the wizard's **Password** field, or in the environment 
    ```
 
 `pg_stat_statements.max` (default `5000`) caps how many distinct statements PostgreSQL tracks. If your workload has many distinct statements, raise it. Evicted statements show up as gaps in **Top queries**.
-
-#### Execution plans
-
-To see plans in [query details](../../../database-monitoring/query-performance/#explain-plan), you need three things, not one:
-
-1. Check **Collect execution plans** on the **Query performance** coverage.
-2. Give the monitoring user read access to your tables, since running `EXPLAIN` needs it:
-
-   ```sql
-   GRANT pg_read_all_data TO kmmonitor;
-   ```
-
-3. Tell the agent to run `EXPLAIN`. Open **Advanced**, choose the **Query performance** coverage, and add:
-
-   ```yaml
-   top_query_collection:
-     max_explain_each_interval: 1000
-   ```
-
-A new query can take a few collection intervals before its first plan appears.
 
 #### Enable server logs
 
@@ -147,8 +124,6 @@ MariaDB uses the MySQL coverages.
 
 ### Set up the database
 
-The wizard shows these steps when you turn on the coverages that need them. Run them before you save.
-
 #### Create a monitoring user
 
 Every MySQL coverage connects as one monitoring user:
@@ -161,8 +136,6 @@ GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'kmmonitor'@'%';
 :::caution[Use one host part for the user]
 A MySQL account is a user name plus a host part, and a `GRANT` to an account that doesn't exist fails on MySQL 8. The wizard's steps create the user as `'kmmonitor'@'localhost'` but grant later privileges to `'kmmonitor'@'%'`. Pick one host part and use it in every statement: `'%'` when the agent connects over the network, as in the examples on this page.
 :::
-
-Use the same password in the wizard's **Password** field, or in the environment variable it names. See [Database credentials](../credentials/).
 
 #### Enable performance_schema
 
@@ -188,12 +161,6 @@ The two length settings stop long statements from being cut off in **Top queries
 :::note[MariaDB]
 MariaDB ships with `performance_schema` off. Until you turn it on, the query tabs stay empty and connection counts and uptime are missing, even though the instance still shows as available.
 :::
-
-#### Execution plans
-
-To see plans in [query details](../../../database-monitoring/query-performance/#explain-plan), check **Collect execution plans** on the **Query performance** coverage. No extra grant or override is needed, since the monitoring user already has `SELECT` on your tables.
-
-A new query can take a few collection intervals before its first plan appears. Plans for statements with subqueries or `UNION` can't be displayed yet.
 
 #### Turn on the slow query log
 
@@ -231,7 +198,7 @@ Most coverages need `VIEW SERVER STATE` on the monitoring login.
 
 ### Set up the database
 
-The wizard shows grant steps when you turn on the coverages that need them. It doesn't show how to create the login, and it doesn't test any of these when you save: a missing grant shows up only as an empty tab and as errors in the agent log. Run these before you save.
+The wizard's setup steps don't include creating the login, so start there.
 
 #### Create a monitoring login
 
@@ -241,8 +208,6 @@ Every SQL Server coverage connects as a monitoring login. Create it and give it 
 CREATE LOGIN kmmonitor WITH PASSWORD = 'YOUR_PASSWORD';
 GRANT VIEW SERVER STATE TO kmmonitor;
 ```
-
-Use the same password in the wizard's **Password** field, or in the environment variable it names. See [Database credentials](../credentials/).
 
 `VIEW SERVER STATE` also covers **Instance info**, **Waits, scheduler & file I/O**, **Session breakdown**, **Memory & plan cache**, **TempDB usage**, **Index health**, and **Query log**.
 
@@ -255,10 +220,6 @@ GRANT VIEW ANY DATABASE TO kmmonitor;
 ```
 
 On SQL Server 2022 and later, the wizard offers `VIEW SERVER PERFORMANCE STATE` as the narrower alternative to `VIEW SERVER STATE` for this coverage.
-
-#### Execution plans
-
-To see plans in [query details](../../../database-monitoring/query-performance/#explain-plan), check **Collect execution plans** on the **Query performance** coverage. SQL Server needs no extra grant or override for plans. Each plan is the full XML showplan, often tens to hundreds of KB per statement, so expect a noticeable increase in data volume.
 
 #### Grant access to msdb
 
@@ -325,8 +286,6 @@ SELECT value FROM v$parameter WHERE name = 'control_management_pack_access';
 :::
 
 ### Set up the database
-
-The wizard doesn't check any of this when you save. A missing grant shows up as an empty tab and as errors in the agent log.
 
 #### Create a monitoring user
 
@@ -409,10 +368,6 @@ GRANT SELECT ON V_$SQL TO kmmonitor;
 
 **Instance info**, **Container topology**, **Schema catalog**, **Uptime**, and the AWR coverages need nothing beyond `SELECT_CATALOG_ROLE`.
 
-#### Execution plans
-
-To see plans in [query details](../../../database-monitoring/query-performance/#explain-plan), check **Collect execution plans** on the **Query performance** coverage. Plans come from `V$SQL_PLAN_STATISTICS_ALL`, which the grants above already cover, so there's nothing else to set up. A new statement can take a few collection intervals before its first plan appears.
-
 ## MongoDB
 
 | Coverage | Collects | Needs |
@@ -423,8 +378,6 @@ To see plans in [query details](../../../database-monitoring/query-performance/#
 Set **Disable TLS** for a self-hosted MongoDB without TLS. It's off by default, and without it the connection expects a verified certificate.
 
 ### Set up the database
-
-The wizard shows the MongoDB steps when you turn on **Query performance**. Run them before you save.
 
 #### Grant the clusterMonitor role
 
@@ -565,8 +518,6 @@ GRANT SELECT ON system.replicas TO kmmonitor;
 GRANT SELECT ON system.query_log TO kmmonitor;
 ```
 
-Use the same password in the wizard's **Password** field, or in the environment variable it names. See [Database credentials](../credentials/).
-
 ## Elasticsearch
 
 | Coverage | Collects | Needs |
@@ -578,8 +529,6 @@ Use the same password in the wizard's **Password** field, or in the environment 
 1. Set **Endpoint** to the base URL of an Elasticsearch node, including the scheme and port, such as `http://10.0.0.20:9200`. The default is `http://localhost:9200`.
 2. If security is enabled on the cluster, enter a **Monitoring user** and **Password**. The user needs read access to the `_cluster/health` and `_nodes/stats` APIs. If security is disabled, leave **Monitoring user** empty.
 3. For a cluster that serves HTTPS, use an `https://` endpoint. Check **Skip certificate verification** if the node uses a self-signed certificate.
-
-The wizard shows no setup steps for Elasticsearch. For how to store the password, see [Database credentials](../credentials/).
 
 One endpoint is enough for the whole cluster. Cluster health comes from the node you point at, and node statistics arrive as one series per node, which most panels add together into a cluster value.
 
@@ -594,8 +543,6 @@ One endpoint is enough for the whole cluster. Cluster health comes from the node
 1. Set **Endpoint** to the host and SQL port of the HANA database, such as `10.0.0.30:30015`. The default is `localhost:30015`. The SQL port depends on your instance number and whether you connect to a tenant database, so check it in your HANA system before you save.
 2. Enter a **Monitoring user** and **Password**. Both are required. The user needs read access to HANA's system monitoring views.
 3. Decide on TLS. **Disable TLS** is on by default, which matches a self-hosted HANA without TLS configured. Turn it off to connect over TLS. The server's certificate isn't verified.
-
-The wizard shows no setup steps for SAP HANA. For how to store the password, see [Database credentials](../credentials/).
 
 ## Snowflake
 
@@ -640,6 +587,17 @@ For how to store the password, see [Database credentials](../credentials/).
 **Collection interval** defaults to `300s` for Snowflake, instead of the `60s` other engines use. Each collection runs queries on the warehouse you named, and those queries consume credits. A shorter interval raises that cost without giving you fresher data, because `ACCOUNT_USAGE` itself lags.
 
 A collection also resumes the warehouse if it's suspended, so use a small warehouse for monitoring.
+
+## Execution plans
+
+PostgreSQL, MySQL and MariaDB, SQL Server, and Oracle can send each statement's execution plan for [query details](../../../database-monitoring/query-performance/#explain-plan). Check **Collect execution plans** on the **Query performance** coverage. A new statement can take a few collection intervals before its first plan appears.
+
+| Engine | Also needed | Notes |
+|---|---|---|
+| PostgreSQL | `GRANT pg_read_all_data TO kmmonitor;`, because running `EXPLAIN` needs read access to your tables. Then open **Advanced**, choose **Query performance**, and set `top_query_collection.max_explain_each_interval: 1000`. | — |
+| MySQL and MariaDB | Nothing. The monitoring user already has `SELECT` on your tables. | Plans for statements with subqueries or `UNION` can't be displayed yet. |
+| SQL Server | Nothing. | Each plan is the full XML showplan, often tens to hundreds of KB per statement, so expect a noticeable increase in data volume. |
+| Oracle | Nothing. Plans come from `V$SQL_PLAN_STATISTICS_ALL`, which the Oracle grants already cover. | — |
 
 ## Filter database logs
 
