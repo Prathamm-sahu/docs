@@ -28,7 +28,7 @@ The connection records the account you authorized, so you can tell two Slack ins
 
 AWS, Azure, GitHub, Atlassian, a custom MCP server, and a generic OAuth 2.0 API take their credentials in a form. Fill in the provider's fields and click **Connect**.
 
-Where a provider supports more than one method, choose one under **Authentication**. For example, Atlassian offers a **Personal API token** or a **Service account API key**, and a custom MCP server offers **None**, **Bearer token**, **Basic auth**, **API key**, or **OAuth**.
+Where a provider supports more than one method, choose one under **Authentication**. For example, a custom MCP server offers **None**, **Bearer token**, **Basic auth**, **API key**, or **OAuth**.
 
 A custom MCP server with **OAuth** is saved as **Pending** first, and then KloudMate opens the server's own sign-in page. KloudMate finds the server's sign-in, registers itself as a client, and uses PKCE, so you don't need a client ID. If the sign-in doesn't finish, the row stays **Pending** with an **Authorize** button beside it.
 

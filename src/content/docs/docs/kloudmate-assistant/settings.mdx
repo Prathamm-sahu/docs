@@ -90,6 +90,12 @@ To give everyone in the workspace the same server, a **Developer** connects it a
 
 Without the **Developer** role, you can edit, re-check, and delete your own private tool servers, but you can't share them.
 
+### One tool server per provider
+
+The Assistant uses one tool server per provider, such as one Atlassian server, so it never has to guess which one to act with. Custom MCP servers and AWS accounts are the exception: the Assistant uses all of them.
+
+If you can use two servers of the same provider, the Assistant uses one that you connected before one that someone else connected, then the oldest. So two people in a workspace can be on different servers. The other one shows **Not used by the Assistant**. Point to that label to see which server the Assistant uses instead. To use the other one, switch off the one in use, or ask a workspace admin to.
+
 ### Choose the tools the Assistant can use
 
 Open a server's row menu and click **Tools…** to see the tools the server offers and set how the Assistant uses each one. Click **Save** when you're done.

@@ -100,6 +100,8 @@ A personal API token needs none of this. It has the same access as the account t
 
 KloudMate then checks the connection. It lists the tools and calls `getAccessibleAtlassianResources`, a read-only tool that lists the Atlassian sites the credential can reach. When that call works, the connection shows **Verified**.
 
+The Assistant uses one Atlassian connection. If there are two, the one it doesn't use shows **Not used by the Assistant**. See [One tool server per provider](../../../../kloudmate-assistant/settings/#one-tool-server-per-provider).
+
 ## If the connection shows Degraded
 
 To see why the last check failed, point to **Degraded** in the connections list.
