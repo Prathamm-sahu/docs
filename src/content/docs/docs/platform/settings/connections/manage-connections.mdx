@@ -26,6 +26,8 @@ Changing **Can be used for** can break things that are already working. Removing
 
 A connection that fails the check becomes **Degraded**. That's a warning, not an outage: workflow steps and dashboard queries still run through it. App-event triggers are the exception, and pause until it verifies again.
 
+To see why the last check failed, point to **Degraded** in the connections list.
+
 ## Reconnect
 
 **Reconnect** re-runs the OAuth approval and rotates the credential in place. The connection keeps its id, so every workflow, channel, and dashboard that uses it keeps working. Slack, Jira Cloud, Sentry, the Google Cloud providers, a custom MCP server that uses **OAuth**, and an OAuth 2.0 connection that uses the authorization-code grant have it. For the other providers, use **Edit** instead. While a connection's first approval is unfinished, the action is called **Authorize**.
