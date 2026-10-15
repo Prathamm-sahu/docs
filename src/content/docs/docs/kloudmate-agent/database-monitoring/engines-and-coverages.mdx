@@ -51,7 +51,6 @@ Every coverage connects as a monitoring user with the `pg_monitor` role.
 | **Table bloat & vacuum blockers** | Dead tuples per table and sessions blocking vacuum | — |
 | **Server logs (JSON, PostgreSQL 15+)** | Slow queries and errors from `jsonlog` files | `log_destination = 'jsonlog'`. VM only. |
 | **Logs (stderr, PostgreSQL &lt;15)** | The same, from stderr log files | `log_destination = 'stderr'`. VM only. |
-| **Uptime** | Uptime from `pg_postmaster_start_time()` | — |
 
 Only one of the two log coverages can be on. **Schema catalog**, **Table bloat**, and per-table vacuum stats cover the database set in the **Database** field.
 
@@ -186,15 +185,13 @@ Most coverages need `VIEW SERVER STATE` on the monitoring login.
 | **Query log (active + top queries)** | Active queries and the most CPU-expensive statements, as log records | `VIEW SERVER STATE` |
 | **Schema catalog** | Tables, columns, indexes, and foreign keys in the connected database | — |
 | **Replication topology & lag** | Availability group roles, replica roster, commit lag, send and redo backlog | `VIEW SERVER STATE`, `VIEW ANY DEFINITION` |
-| **Agent jobs** | SQL Server Agent job runs, outcomes, and messages | A user in `msdb` with `SQLAgentReaderRole`. Not on Azure SQL Database. |
+| **Agent jobs** | SQL Server Agent job runs, outcomes, and messages | A user in `msdb` with `SELECT` on `sysjobs`, `sysjobhistory`, and `sysjobactivity`, and `EXECUTE` on `agent_datetime`. Not on Azure SQL Database. |
 | **Backup tracking** | Time since each database's last full, differential, and log backup | `SELECT` on `msdb.dbo.backupset` and `backupmediafamily` |
 | **Index health** | Missing index suggestions, index usage, fragmentation | `VIEW SERVER STATE` |
 | **Memory & plan cache** | Memory clerks, plan cache by type, memory grants | `VIEW SERVER STATE` |
 | **Session breakdown** | Sessions by login, application, and status; request states | `VIEW SERVER STATE` |
 | **TempDB usage** | TempDB space by consumer and file | `VIEW SERVER STATE` |
 | **Waits, scheduler & file I/O** | Top wait types, scheduler queues, per-file I/O latency | `VIEW SERVER STATE` |
-| **Database Size** | Data file size across user databases | — |
-| **Uptime** | Engine uptime from `sqlserver_start_time` | `VIEW SERVER STATE` |
 
 ### Set up the database
 
@@ -230,7 +227,10 @@ USE msdb;
 CREATE USER kmmonitor FOR LOGIN kmmonitor;
 
 -- Agent jobs
-ALTER ROLE SQLAgentReaderRole ADD MEMBER kmmonitor;
+GRANT SELECT ON dbo.sysjobs TO kmmonitor;
+GRANT SELECT ON dbo.sysjobhistory TO kmmonitor;
+GRANT SELECT ON dbo.sysjobactivity TO kmmonitor;
+GRANT EXECUTE ON dbo.agent_datetime TO kmmonitor;
 
 -- Backup tracking
 GRANT SELECT ON dbo.backupset TO kmmonitor;
@@ -273,7 +273,6 @@ Every coverage connects with the **Service name** you enter, which selects a PDB
 | **AWR top SQL & plan history** | Top SQL by elapsed time with plan hash, per snapshot | Diagnostics Pack |
 | **AWR I/O & segment statistics** | I/O by function and tablespace, top segments | Diagnostics Pack |
 | **AWR active session history** | ASH activity by wait class, SQL, module, and object | Diagnostics Pack |
-| **Uptime** | Uptime from `v$instance.startup_time` | — |
 
 :::caution
 The AWR coverages read `DBA_HIST_*` views, which require the Oracle Diagnostics Pack, an Enterprise Edition option. Reading them records Diagnostics Pack usage in `DBA_FEATURE_USAGE_STATISTICS`. Before you turn one on, check that the pack is enabled:
@@ -366,7 +365,7 @@ GRANT SELECT ON V_$SESSION TO kmmonitor;
 GRANT SELECT ON V_$SQL TO kmmonitor;
 ```
 
-**Instance info**, **Container topology**, **Schema catalog**, **Uptime**, and the AWR coverages need nothing beyond `SELECT_CATALOG_ROLE`.
+**Instance info**, **Container topology**, **Schema catalog**, and the AWR coverages need nothing beyond `SELECT_CATALOG_ROLE`.
 
 ## MongoDB
 
