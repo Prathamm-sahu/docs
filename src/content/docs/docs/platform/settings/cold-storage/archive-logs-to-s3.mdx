@@ -36,6 +36,8 @@ The bucket, region, and prefix can't be changed after you connect. To move the a
     - **KMS key ARN (optional)**: only if the bucket encrypts with SSE-KMS.
     - **Backfill logs already stored**: on by default. It also exports the logs already in the workspace's retention, not only new ones. Turn it off to start the archive from now.
 
+    ![The Connect S3 bucket dialog on the Bucket step, with Bucket name, Bucket region, and Prefix](./images/connect-bucket.png)
+
 3. Click **Open AWS Console**. The CloudFormation quick-create page opens in the bucket's region, with the template, bucket, prefix, KMS key, and external ID filled in. Leave **ExternalId** as it is.
 
     If a `kloudmate-archive` stack already exists in that region, see [If a kloudmate-archive stack already exists](#if-a-kloudmate-archive-stack-already-exists) instead.
@@ -49,8 +51,6 @@ The bucket, region, and prefix can't be changed after you connect. To move the a
 6. When verification passes, click **Done**.
 
 </Steps>
-
-![Screenshot pending: the Connect S3 bucket dialog on the Bucket step, with Bucket name, Bucket region, Prefix, KMS key ARN, and Backfill logs already stored](../../../_placeholders/screenshot-placeholder.png)
 
 The first hour is exported about 2 hours after it ends. With backfill on, the older hours are exported after that, which can take a while for a workspace that stores a lot of logs. The **Coverage** table shows how far it has got.
 
@@ -104,7 +104,7 @@ The **Archive** tab shows the connected bucket and its state:
 - **Setup incomplete**: the role hasn't been verified yet. Click **Finish setup** to continue where you left off.
 - **Disabled**: exports are turned off.
 
-![Screenshot pending: the Archive tab, with the connected bucket marked Archiving and the Coverage table below it](../../../_placeholders/screenshot-placeholder.png)
+![The Archive tab: the connected bucket marked Archiving, a previous bucket, and the Coverage table](./images/archive-tab.png)
 
 ### Coverage
 
@@ -129,6 +129,8 @@ When the bucket shows **Not working**, fix the cause in AWS and click **Verify**
 ### Replace the bucket
 
 Click **Replace…** to connect a different bucket, region, or prefix. It's available while exports are enabled. You go through the same steps as a new connection. New hours are exported to the new bucket, and the old one moves to **Previous buckets**.
+
+![The Replace bucket dialog on the Create the role step, with the Open AWS Console button](./images/create-role-step.png)
 
 You can still rehydrate logs from a previous bucket as long as its role keeps working, so leave the old stack as it is. If the new stack goes in the same region, give it a new name, as described in [If a kloudmate-archive stack already exists](#if-a-kloudmate-archive-stack-already-exists).
 
