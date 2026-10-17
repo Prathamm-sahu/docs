@@ -37,7 +37,7 @@ You can start one from either place:
 
 </Steps>
 
-The estimate shows the rows and size that will load, how long loading will take, when it will start, how long it stays searchable, and the **Charge**. **Size** shows both the volume originally ingested, which the charge is based on, and the amount read from S3, which AWS bills as data transfer.
+The estimate shows the rows and size that will load, how long loading will take, when it will start, how long it stays searchable, and the **Charge**. **Size** shows both the volume originally ingested, which the charge is based on, and the amount read from S3.
 
 Filtering by service narrows what you load and search, but it doesn't reduce the estimate or the charge. Both cover every service in each hour, because the archive is read an hour at a time.
 
@@ -116,7 +116,7 @@ Either way, the hours that already loaded are still charged.
 
 Rehydration costs $0.10 per GB, measured on the volume the workspace originally ingested for each hour that loads. Each hour is charged as it loads, so hours that fail to load aren't charged. The charge appears on your KloudMate bill as **Log Rehydration**.
 
-AWS bills your account separately for the data read out of S3, which the estimate shows as the amount read from S3.
+AWS bills your account separately for the data read out of S3. That cost isn't part of the estimate's **Charge**, but the estimate shows the size read from S3, so you can work it out from AWS's data transfer pricing.
 
 ## Logs in Glacier storage classes
 
