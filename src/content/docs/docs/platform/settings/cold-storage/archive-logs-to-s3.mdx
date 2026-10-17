@@ -4,7 +4,6 @@ description: "Connect an S3 bucket in your AWS account so KloudMate exports the 
 sidebar:
   label: "Archive logs to S3"
   order: 2
-draft: true
 ---
 
 import { Steps } from '@astrojs/starlight/components';
@@ -51,7 +50,7 @@ The bucket, region, and prefix can't be changed after you connect. To move the a
 
 </Steps>
 
-![Screenshot pending: the Connect S3 bucket dialog on the Bucket step, with Bucket name, Bucket region, Prefix, KMS key ARN, and Backfill logs already stored](../../_placeholders/screenshot-placeholder.png)
+![Screenshot pending: the Connect S3 bucket dialog on the Bucket step, with Bucket name, Bucket region, Prefix, KMS key ARN, and Backfill logs already stored](../../../_placeholders/screenshot-placeholder.png)
 
 The first hour is exported about 2 hours after it ends. With backfill on, the older hours are exported after that, which can take a while for a workspace that stores a lot of logs. The **Coverage** table shows how far it has got.
 
@@ -105,7 +104,7 @@ The **Archive** tab shows the connected bucket and its state:
 - **Setup incomplete**: the role hasn't been verified yet. Click **Finish setup** to continue where you left off.
 - **Disabled**: exports are turned off.
 
-![Screenshot pending: the Archive tab, with the connected bucket marked Archiving and the Coverage table below it](../../_placeholders/screenshot-placeholder.png)
+![Screenshot pending: the Archive tab, with the connected bucket marked Archiving and the Coverage table below it](../../../_placeholders/screenshot-placeholder.png)
 
 ### Coverage
 
