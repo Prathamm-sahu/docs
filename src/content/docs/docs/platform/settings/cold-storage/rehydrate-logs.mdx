@@ -122,10 +122,12 @@ AWS bills your account separately for the data read out of S3. That cost isn't p
 
 ## Logs in Glacier storage classes
 
-Rehydration reads the archived files directly. If a lifecycle rule has moved an hour's files to S3 Glacier Flexible Retrieval, S3 Glacier Deep Archive, or the Archive Access or Deep Archive Access tier of S3 Intelligent-Tiering, that hour fails to load.
+Rehydration reads the archived files directly from your bucket. It can't read files that a lifecycle rule has moved to S3 Glacier Flexible Retrieval or S3 Glacier Deep Archive, or to the Archive Access or Deep Archive Access tier of S3 Intelligent-Tiering. Files in S3 Standard, Glacier Instant Retrieval, and the other storage classes load directly.
 
-To rehydrate those hours, restore the objects in S3 first, then start the rehydration while the restored copies are still available. Files in S3 Standard, Standard-IA, One Zone-IA, Glacier Instant Retrieval, and Intelligent-Tiering's other tiers load without a restore.
+The estimate doesn't check storage classes, so it still counts those hours in its rows and charge. When loading reaches one of them, that hour fails right away with a reason saying its files are in a Glacier storage class. You aren't charged for it, and the rest of the range keeps loading.
+
+To search those hours, restore their files in S3, then rehydrate the range again. A new rehydration can't overlap an active one in the same workspace, so delete the first rehydration or wait for it to expire.
 
 :::tip
-If you expect to search older logs again, have your lifecycle rule move them to Glacier Instant Retrieval rather than Deep Archive. They stay cheap to store and can be rehydrated directly.
+If you might want to rehydrate logs later, keep them in S3 Standard or Glacier Instant Retrieval. Glacier Instant Retrieval costs less to store and loads without a restore.
 :::

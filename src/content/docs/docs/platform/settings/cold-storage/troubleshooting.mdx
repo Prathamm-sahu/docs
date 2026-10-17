@@ -56,7 +56,7 @@ A message that starts with "Could not check the bucket" means verification hit a
 KloudMate can lose access after setup, for example when someone deletes the role or the bucket, edits the bucket policy, or changes the KMS key policy. When that happens:
 
 - Exports pause, and the bucket shows **Not working** with the reason.
-- KloudMate emails the Owner who connected the bucket.
+- KloudMate emails the Owner who connected the bucket, with a link to **Settings → Cold Storage**.
 - A rehydration that's loading from that bucket stops. The hours it hadn't loaded yet fail with the same reason, and the hours already loaded stay searchable.
 
 Fix the cause using the sections above, then click **Verify**. Exports resume and catch up on the hours that were missed, as long as they're still within the workspace's log retention. Hours that leave retention before then show as **Expired** in **Coverage** and aren't archived, so fix a broken bucket as soon as you can.
@@ -74,9 +74,17 @@ To see why individual hours failed, hover over the failed count in the **Progres
 
 To retry hours that failed, start a new rehydration that covers them. A new rehydration can't overlap an active one in the same workspace, so delete the first one or wait for it to expire.
 
+### This hour's files are in a Glacier storage class
+
+A lifecycle rule moved the hour's files to a storage class that KloudMate can't read, such as S3 Glacier Flexible Retrieval or Deep Archive. Restore the files in S3, then retry the hour. See [Logs in Glacier storage classes](../rehydrate-logs/#logs-in-glacier-storage-classes).
+
+### This hour's archived files are no longer in the bucket
+
+The hour's files were deleted from the bucket, for example by a lifecycle rule that expires old objects. KloudMate can't load that hour.
+
 ### The hour could not be loaded
 
-The hour failed after several attempts. A common cause is a lifecycle rule that moved the hour's files to a Glacier storage class that has to be restored before it can be read. See [Logs in Glacier storage classes](../rehydrate-logs/#logs-in-glacier-storage-classes).
+KloudMate tried to load the hour several times and couldn't. Retry the hour later.
 
 ### The archived files for this hour changed after they were written
 
