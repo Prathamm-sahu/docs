@@ -2,7 +2,8 @@
 title: "Send Claude API Traces to KloudMate"
 description: "Send OpenTelemetry traces of your Claude Messages API requests, tool uses, and Managed Agents sessions to KloudMate, from the Claude Console or the Claude SDK."
 sidebar:
-  order: 2
+  label: "Claude API and SDK"
+  order: 1
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -14,6 +15,8 @@ You can send traces from two places, and you can use both at once:
 - **API tracing** sends spans from the Claude API itself. You add a destination in the Claude Console, and every request in the workspaces it covers is traced, from any client, with no code change. It's the only way to see each model run inside a request, server tools such as web search, and Managed Agents turns.
 - **SDK tracing** sends spans from the Claude SDK in your application, through your own OpenTelemetry exporter. It also traces the client tools that the SDK's tool runner runs, and it nests each Claude call under your application's spans.
 
+To monitor Claude Code, Claude Desktop, or Cowork instead, see [Send Claude Code and Cowork Telemetry to KloudMate](../send-claude-code-telemetry/).
+
 :::note
 OpenTelemetry export for the Claude API is in beta. Span and attribute names can change between versions, so check the [Claude OpenTelemetry docs](https://platform.claude.com/docs/en/manage-claude/opentelemetry) if a query or dashboard stops matching.
 :::
@@ -22,7 +25,7 @@ OpenTelemetry export for the Claude API is in beta. Span and attribute names can
 
 - A KloudMate workspace API key, from **Settings → Ingest Keys**.
 - For API tracing, the **admin** role in your Claude Console organization. With the developer role, you can view destinations but not add them.
-- For SDK tracing, the [KloudMate agent](../../../kloudmate-agent/installation/) on the machine that runs your application, or your API key to send to KloudMate directly.
+- For SDK tracing, the [KloudMate agent](../../../../kloudmate-agent/installation/) on the machine that runs your application, or your API key to send to KloudMate directly.
 
 ## Send API traces from the Claude Console
 
