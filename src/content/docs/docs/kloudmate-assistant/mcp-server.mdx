@@ -127,9 +127,39 @@ To use the connector in a chat, click **+**, then **Connectors**, and turn on Kl
 On a Team or Enterprise plan, an Owner adds the connector under **Organization settings > Connectors**. Each member then clicks **Connect** on it under **Customize > Connectors** and signs in to KloudMate with their own account.
 
 </TabItem>
+<TabItem label="ChatGPT">
+
+Add a custom connector in ChatGPT with `https://api.kloudmate.com/mcp` as its URL and **OAuth** as its authentication. ChatGPT opens KloudMate so you can sign in.
+
+If ChatGPT asks how to register the client, either method works:
+
+- **Client ID Metadata Document (CIMD)**: ChatGPT identifies itself with its published metadata document.
+- **Dynamic Client Registration (DCR)**: ChatGPT registers itself with KloudMate the first time it connects.
+
+</TabItem>
 </Tabs>
 
-For any other client that supports OAuth for remote MCP servers, such as ChatGPT or MCP Inspector, enter the endpoint URL and sign in the same way.
+For any other client that supports OAuth for remote MCP servers, such as MCP Inspector, enter the endpoint URL and sign in the same way.
+
+### Client registration
+
+Most clients register themselves, so you don't need this section to connect one. It's for you if you're building a client, or if your client asks which registration method or authentication to use.
+
+KloudMate supports two ways for a client to register:
+
+| Method | How the client identifies itself | Token endpoint authentication |
+|---|---|---|
+| **Client ID Metadata Document (CIMD)** | Its `client_id` is an `https` URL to its own metadata document, which KloudMate fetches and caches for a day. | `none`, or `private_key_jwt` when the document names its signing keys: an inline `jwks`, or an `https` `jwks_uri` on the document's own host. |
+| **Dynamic Client Registration (DCR)** | It registers at `https://api.kloudmate.com/oauth/register` and gets a `client_id`. | `none`, `client_secret_basic`, or `client_secret_post`. |
+
+Every client uses the authorization code flow with PKCE (`S256`). The scopes are `mcp`, and `offline_access` for a refresh token.
+
+A client that authenticates with `private_key_jwt` sends a client assertion (RFC 7523) to the token endpoint. Sign it with `RS256` or `ES256`, set `iss` and `sub` to the `client_id`, set `aud` to `https://api.kloudmate.com/oauth/token`, and keep it to 5 minutes or less. Each assertion works once.
+
+A client discovers all of this from two documents:
+
+- `https://api.kloudmate.com/.well-known/oauth-protected-resource/mcp`: the MCP server's protected resource metadata (RFC 9728).
+- `https://api.kloudmate.com/.well-known/oauth-authorization-server`: the authorization server metadata (RFC 8414).
 
 ## Connect with an API key
 
