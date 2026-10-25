@@ -71,6 +71,10 @@ If the container's entrypoint overwrites `NODE_OPTIONS` or another instrumentati
 
 To keep the agent from recreating containers on a host, set `KM_CONTAINER_SDK_RECREATE=false` in the agent's environment. The **View SDK settings** option still works.
 
+### Keep the SDK across redeploys
+
+A recreated container loses the SDK when it's redeployed, because the next deploy creates it from your original settings. Turn on [redeploy-safe SDK](../redeploy-safe-sdk/) to add the SDK as Docker creates each container instead. It also covers Compose and Swarm containers, with no change to their files.
+
 ## Instrument PHP containers
 
 A PHP container offers an **SDK** option on the agent's **APM** tab. Turn it on for a container and the agent injects the tracer, matches it to the container's PHP build, and reloads the web server (an Apache graceful reload or a php-fpm reload). Tracing starts with no redeploy and no container restart.
