@@ -6,7 +6,7 @@ sidebar:
   order: 1.5
 ---
 
-Organization settings apply org-wide: the display name, default timezone, and overage policy.
+Organization settings apply org-wide: the display name, default timezone, overage policy, and MFA requirement.
 
 Open **Settings → Organization** to view or edit these settings.
 
@@ -28,6 +28,34 @@ Controls what happens when usage exceeds your plan's allowance:
 - **On:** KloudMate suspends ingest the moment usage crosses the threshold, protecting against runaway bills.
 
 Toggle **Allow unlimited overage** to switch between the two.
+
+## Require MFA for All Members
+
+Owners can require every member of the organization to use multi-factor authentication (MFA). This is available on all plans.
+
+1. Make sure you've set up MFA yourself in [Profile & Security](../profile-security/). You can't turn the requirement on without it.
+2. Open **Settings → Organization → Profile**.
+3. In the **Security** card, turn on **Require multi-factor authentication**.
+
+Turn the switch off to remove the requirement.
+
+### What Members See
+
+- A member without MFA is asked to set it up at their next sign-in with a password: scan a QR code, enter a 6-digit code, and copy the recovery code, which is shown only once.
+- Switching to the organization, or accepting an invite to it, is refused until the member has set up MFA. An invite stays valid, so the member can accept it after setting up MFA.
+- Sessions that are already open keep working.
+- Members who already use MFA notice no change.
+- Members can't turn MFA off while the requirement is on.
+
+The **Users** list shows whether MFA is on for each member.
+
+:::note
+If a member belongs to several organizations and any one of them requires MFA, MFA is required for every password sign-in of that member, including into organizations that don't require it.
+:::
+
+:::note
+Members who sign in with SSO are exempt, because your identity provider handles the second factor.
+:::
 
 ## Leave an Organization
 

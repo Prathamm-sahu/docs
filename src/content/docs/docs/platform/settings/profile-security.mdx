@@ -35,6 +35,12 @@ With MFA on, signing in asks for a 6-digit code from an authenticator app after 
 The recovery code is shown only once. If you lose your authenticator device, it's how you sign in without contacting support.
 :::
 
+### When Your Organization Requires MFA
+
+If any organization you belong to [requires MFA](../organization/#require-mfa-for-all-members), you're asked to set it up at your next sign-in with a password. After you enter your password, scan the QR code, enter the 6-digit code, and copy the recovery code, which is shown only once. You're then signed in. Sessions that are already open keep working.
+
+Signing in with your recovery code takes you straight to the same setup step so you can register a new device.
+
 ## Create a New Recovery Code
 
 Create a new code if you've lost yours, or if the page shows **No recovery code is set**.
@@ -69,3 +75,7 @@ If you get that confirmation email without having asked for it, write to [suppor
 2. Click **Disable MFA**, then confirm.
 
 Turning MFA off also removes your recovery code.
+
+:::note
+You can't turn MFA off while any of your organizations requires it. **Disable MFA** is replaced by **Required by** followed by the organization's name.
+:::
