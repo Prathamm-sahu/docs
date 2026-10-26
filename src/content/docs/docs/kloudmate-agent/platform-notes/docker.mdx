@@ -66,10 +66,29 @@ The agent leaves a container as it is and shows the reason on its row in these c
 | Unsupported runtime: Node.js older than 18.19, a Python version the bundle doesn't include, or Python and .NET on Alpine (musl) images | Use eBPF for the container, or a supported image. |
 | `JAVA_TOOL_OPTIONS` would exceed 1024 characters | Shorten the existing options. The JVM ignores longer values. |
 | The agent was installed without the shared folders | Reinstall the agent with the current Docker install command. |
+| The container's network can't reach the agent, such as a macvlan or ipvlan network | Set `KM_CONTAINER_OTLP_URL` on the agent. See [How containers reach the agent](#how-containers-reach-the-agent). |
 
 If the container's entrypoint overwrites `NODE_OPTIONS` or another instrumentation variable, the app runs without the SDK and the row shows the reason. Set the variable in the image instead of in the entrypoint script.
 
 To keep the agent from recreating containers on a host, set `KM_CONTAINER_SDK_RECREATE=false` in the agent's environment. The **View SDK settings** option still works.
+
+### How containers reach the agent
+
+Node.js containers send traces over the agent's OpenTelemetry socket. The other runtimes send them over OTLP/HTTP, to an address the agent picks for each container:
+
+- **Host network:** `http://127.0.0.1:4318`.
+- **Bridge network:** the network's gateway, for example `http://172.17.0.1:4318`, which reaches the agent on the host.
+
+On a network with no route to the host, such as macvlan or ipvlan, the agent leaves the container as it is and its row says the container can't reach the agent. Set `KM_CONTAINER_OTLP_URL` to an address your containers can reach, and the agent uses it for every container:
+
+- **Docker-mode agent:** add `-e KM_CONTAINER_OTLP_URL=http://10.0.0.5:4318` to the agent container.
+- **Linux agent:** add `KM_CONTAINER_OTLP_URL=http://10.0.0.5:4318` to `/etc/kmagent/kmagent.env`, then restart the agent with `sudo systemctl restart kmagent`.
+
+The same address is used for containers that get the SDK through [redeploy-safe SDK](../redeploy-safe-sdk/).
+
+### Keep the SDK across redeploys
+
+A recreated container loses the SDK when it's redeployed, because the next deploy creates it from your original settings. Turn on [redeploy-safe SDK](../redeploy-safe-sdk/) to add the SDK as Docker creates each container instead. It also covers Compose and Swarm containers, with no change to their files.
 
 ## Instrument PHP containers
 
