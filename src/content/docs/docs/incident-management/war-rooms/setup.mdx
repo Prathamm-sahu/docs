@@ -10,7 +10,9 @@ import { Steps } from '@astrojs/starlight/components';
 
 War rooms run on the chat connection you already use for incident notifications. Point them at a Slack or Microsoft Teams channel, decide who gets invited, and optionally let KloudMate create a conference call for each incident.
 
-The settings live on **Incidents → Settings**, under **Incident War Rooms**, below the chat connection they use. You need the **Developer** role to change them. Everyone else sees them read-only.
+The settings live on **Incidents → Settings**, under **War rooms**, below the **ChatOps** card where Slack and Microsoft Teams are connected. You need the **Developer** role to change them. Everyone else sees them read-only.
+
+**Where rooms open** lists every connected Slack workspace and every Teams team channel, each named with its app, such as **Slack · Acme**. A room opens in the app of the one you pick.
 
 ## Before you start
 
@@ -29,7 +31,7 @@ Slack needs more permissions to open a war room than it does to post a notificat
 
 3. Click **Reconnect** beside the connection and approve the Slack install again. Approving again only adds permissions, so you don't lose what Slack already had.
 
-4. Open **Incidents → Settings**, set **Chat provider** to **Slack**, and pick the channel under **Chat channel**.
+4. Open **Incidents → Settings** and pick your Slack workspace under **Where rooms open**.
 </Steps>
 
 KloudMate checks the channel's permissions as soon as you pick it. If anything is missing, a **Reconnect Slack to open war rooms** banner lists the exact scopes, and **Start war room** stays disabled until you fix it. These are the ones it checks:
@@ -48,7 +50,7 @@ A Teams room is a new standard channel in a team connected through the KloudMate
 <Steps>
 1. Connect the team and add one of its channels in KloudMate. See [Microsoft Teams Integration](../../microsoft-teams-integration/).
 
-2. Open **Incidents → Settings**, set **Chat provider** to **Microsoft Teams**, and pick that channel under **Teams team and channel**. Rooms open as new channels in its team.
+2. Open **Incidents → Settings** and pick that channel under **Where rooms open**. Rooms open as new channels in its team.
 
 3. Set **After the incident resolves** to a delay. Teams rooms can't use **Keep the room open**.
 </Steps>
