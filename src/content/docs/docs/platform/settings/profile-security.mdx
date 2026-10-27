@@ -37,11 +37,16 @@ The recovery code is shown only once. If you lose your authenticator device, it'
 
 ### When Your Organization Requires MFA
 
-If any organization you belong to [requires MFA](../organization/#require-mfa-for-all-members), you're asked to set it up at your next sign-in with a password. After you enter your password, scan the QR code, enter the 6-digit code, and copy the recovery code, which is shown only once. You're then signed in. Sessions that are already open keep working.
+An organization can [require MFA](../organization/#require-mfa-for-all-members) for its members. If you don't have MFA yet, you set it up before you can enter that organization:
+
+- If your password sign-in opens that organization, the setup comes right after your password. Scan the QR code, enter the 6-digit code, and copy the recovery code, which is shown only once. You're then signed in.
+- If you open that organization from another one, you see "*Organization* requires MFA. Set it up in Profile & Security." Turn on MFA as described above, then open the organization again.
+
+Sessions already open in that organization keep working. Organizations that don't require MFA still let you in with your password alone.
 
 If the setup has expired by the time you verify, which happens after 15 minutes, you go back to the sign-in page with a message. Sign in again to get a new setup.
 
-Signing in with your recovery code takes you straight to the same setup step so you can register a new device.
+If the organization your sign-in opens requires MFA, signing in with your recovery code takes you straight to the same setup step so you can register a new device.
 
 ## Create a New Recovery Code
 
@@ -79,5 +84,5 @@ If you get that confirmation email without having asked for it, write to [suppor
 Turning MFA off also removes your recovery code.
 
 :::note
-You can't turn MFA off while any of your organizations requires it. If any of your organizations requires it, not only the one you're in, **Disable MFA** is replaced by **Required by** and that organization's name.
+You can't turn MFA off while any of your organizations requires it, including ones you're not signed in to. **Disable MFA** is then replaced by **Required by** and that organization's name.
 :::
