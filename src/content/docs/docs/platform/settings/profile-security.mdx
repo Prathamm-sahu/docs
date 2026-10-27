@@ -39,6 +39,8 @@ The recovery code is shown only once. If you lose your authenticator device, it'
 
 If any organization you belong to [requires MFA](../organization/#require-mfa-for-all-members), you're asked to set it up at your next sign-in with a password. After you enter your password, scan the QR code, enter the 6-digit code, and copy the recovery code, which is shown only once. You're then signed in. Sessions that are already open keep working.
 
+If the setup has expired by the time you verify, which happens after 15 minutes, you go back to the sign-in page with a message. Sign in again to get a new setup.
+
 Signing in with your recovery code takes you straight to the same setup step so you can register a new device.
 
 ## Create a New Recovery Code
@@ -77,5 +79,5 @@ If you get that confirmation email without having asked for it, write to [suppor
 Turning MFA off also removes your recovery code.
 
 :::note
-You can't turn MFA off while any of your organizations requires it. If the organization you're in requires it, **Disable MFA** is replaced by **Required by** and the organization's name. If another of your organizations requires it, turning MFA off is refused with a message naming that organization.
+You can't turn MFA off while any of your organizations requires it. If any of your organizations requires it, not only the one you're in, **Disable MFA** is replaced by **Required by** and that organization's name.
 :::

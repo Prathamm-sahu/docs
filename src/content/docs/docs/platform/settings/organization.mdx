@@ -36,25 +36,29 @@ Owners can require every member of the organization to use multi-factor authenti
 1. Make sure you've set up MFA yourself in [Profile & Security](../profile-security/). You can't turn the requirement on without it.
 2. Open **Settings → Organization → Profile**.
 3. In the **Security** card, turn on **Require multi-factor authentication**.
+4. Confirm. Members without MFA must set it up at their next password sign-in, and can't switch organizations or accept an invite until they do.
 
-Turn the switch off to remove the requirement.
+Turn the switch off to remove the requirement. Turning it off needs only that you're an owner. You don't need MFA on your own account, so an owner who signs in with SSO can still remove it.
+
+Only a signed-in owner can change the requirement. API keys can't turn it on or off.
 
 ### What Members See
 
 - A member without MFA is asked to set it up at their next sign-in with a password: scan a QR code, enter a 6-digit code, and copy the recovery code, which is shown only once.
-- Switching between organizations is refused until the member has set up MFA, and so is accepting an invite to an organization that requires it. An invite stays valid, so the member can accept it after setting up MFA.
+- Switching between organizations is refused until the member has set up MFA.
+- Accepting an invite to an organization that requires MFA offers MFA setup on the invite page. After the member sets it up and copies the recovery code, the invite is accepted.
 - Sessions that are already open keep working.
 - Members who already use MFA notice no change.
 - Members can't turn MFA off while the requirement is on.
 
-The **Users** list shows whether MFA is on for each member.
+The **MFA** column in the **Users** list shows whether MFA is on for each member. **Off** means the member hasn't set up an authenticator app. It doesn't mean they're out of compliance if they sign in with SSO, which doesn't ask for one.
 
 :::note
 If a member belongs to several organizations and any one of them requires MFA, MFA is required for every password sign-in of that member, including into organizations that don't require it.
 :::
 
 :::note
-Members who sign in with SSO are exempt, because your identity provider handles the second factor.
+Sessions that signed in with SSO are exempt at sign-in, when switching organizations, and when accepting an invite, whichever identity provider was used, because the identity provider handles the second factor.
 :::
 
 ## Leave an Organization
